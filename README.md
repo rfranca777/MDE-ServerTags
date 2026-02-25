@@ -394,6 +394,10 @@ Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 **Rafael França**  
 **Customer Success Architect — Cyber Security @ Microsoft**
 
+I built this tool because I kept seeing the same problem at every enterprise I work with: talented security analysts spending hours on manual server classification instead of hunting threats. This project is my way of giving that time back — and sharing the patterns that work at enterprise scale.
+
+> *"Knowledge shared is defense multiplied. Every hour an analyst saves on tag management is an hour gained for threat hunting."*
+
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Rafael_França-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rfranca777/)
 [![Email](https://img.shields.io/badge/Email-rafael.franca@live.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:rafael.franca@live.com)
 [![ODefender](https://img.shields.io/badge/ODefender-Community-FF6F00?style=for-the-badge)](https://github.com/rfranca777/odefender-community)
