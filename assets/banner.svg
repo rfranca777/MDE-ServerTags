@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 250" width="1200" height="250">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a192f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#112240;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="green" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="250" fill="url(#bg2)" rx="12"/>
+
+  <!-- Matrix rain effect -->
+  <g opacity="0.04" fill="#00ff88" font-family="Consolas,monospace" font-size="10">
+    <text x="50" y="20">01001101 01000100 01000101</text>
+    <text x="350" y="40">10110100 01100001 01100111</text>
+    <text x="650" y="25">01010011 01100101 01110010</text>
+    <text x="900" y="45">01110110 01100101 01110010</text>
+    <text x="100" y="230">01010100 01100001 01100111</text>
+    <text x="450" y="240">01000001 01110101 01110100</text>
+    <text x="800" y="225">01101111 01001101 01000100</text>
+  </g>
+
+  <!-- Tag icon -->
+  <g transform="translate(180, 60)" opacity="0.9">
+    <path d="M0,15 L15,0 L45,0 L60,15 L60,45 L35,70 L0,35 Z"
+          fill="none" stroke="url(#green)" stroke-width="2.5"/>
+    <circle cx="42" cy="18" r="6" fill="none" stroke="#00ff88" stroke-width="2"/>
+  </g>
+
+  <!-- Title -->
+  <text x="270" y="100" font-family="Consolas,monospace" font-size="42"
+        fill="url(#green)" font-weight="700" letter-spacing="3">MDE ServerTags</text>
+
+  <!-- Subtitle -->
+  <text x="270" y="135" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="17"
+        fill="#8892b0" letter-spacing="1">Automated Server Classification for Microsoft Defender for Endpoint</text>
+
+  <!-- Separator -->
+  <rect x="270" y="152" width="350" height="1.5" fill="url(#green)" rx="1" opacity="0.4"/>
+
+  <!-- Stats pills -->
+  <g transform="translate(270, 172)">
+    <rect x="0" y="0" width="85" height="24" rx="12" fill="#00ff88" opacity="0.12"/>
+    <text x="42" y="16" font-family="Consolas,monospace" font-size="11"
+          fill="#00ff88" text-anchor="middle">v2.2.0</text>
+
+    <rect x="95" y="0" width="120" height="24" rx="12" fill="#00ff88" opacity="0.12"/>
+    <text x="155" y="16" font-family="Consolas,monospace" font-size="11"
+          fill="#00ff88" text-anchor="middle">Community</text>
+
+    <rect x="225" y="0" width="120" height="24" rx="12" fill="#00ff88" opacity="0.12"/>
+    <text x="285" y="16" font-family="Consolas,monospace" font-size="11"
+          fill="#00ff88" text-anchor="middle">Open Source</text>
+
+    <rect x="355" y="0" width="85" height="24" rx="12" fill="#00ff88" opacity="0.12"/>
+    <text x="397" y="16" font-family="Consolas,monospace" font-size="11"
+          fill="#00ff88" text-anchor="middle">MIT</text>
+  </g>
+
+  <!-- Terminal prompt -->
+  <text x="270" y="225" font-family="Consolas,monospace" font-size="13"
+        fill="#4a5568" opacity="0.6">$ ./Setup-MDE-ServerTags.ps1  ▌</text>
+</svg>

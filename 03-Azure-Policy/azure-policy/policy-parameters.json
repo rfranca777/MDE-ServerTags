@@ -1,0 +1,11 @@
+{
+  "mdeTagKey": {
+    "value": "GROUP"
+  },
+  "mdeTagValue": {
+    "value": "PRODUCAO"
+  },
+  "effect": {
+    "value": "DeployIfNotExists"
+  }
+}

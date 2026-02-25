@@ -1,0 +1,191 @@
+{
+  "properties": {
+    "displayName": "Deploy MDE Device Tag on Virtual Machines",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "description": "Automatically deploys Microsoft Defender for Endpoint Device Tag to Azure VMs and Arc-enabled servers using Custom Script Extension. This policy uses DeployIfNotExists effect to apply tags on new and existing resources.",
+    "metadata": {
+      "category": "Security",
+      "version": "1.0.0",
+      "author": "Rafael França"
+    },
+    "parameters": {
+      "mdeTagKey": {
+        "type": "String",
+        "defaultValue": "GROUP",
+        "metadata": {
+          "displayName": "MDE Device Tag Key",
+          "description": "The key name for the Microsoft Defender for Endpoint Device Tag (e.g., GROUP, Environment, Department, Location)"
+        }
+      },
+      "mdeTagValue": {
+        "type": "String",
+        "metadata": {
+          "displayName": "MDE Device Tag Value",
+          "description": "The value for the Microsoft Defender for Endpoint Device Tag"
+        }
+      },
+      "effect": {
+        "type": "String",
+        "defaultValue": "DeployIfNotExists",
+        "allowedValues": [
+          "DeployIfNotExists",
+          "AuditIfNotExists",
+          "Disabled"
+        ],
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Enable or disable the execution of the policy"
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "anyOf": [
+          {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Compute/virtualMachines"
+              },
+              {
+                "field": "Microsoft.Compute/virtualMachines/storageProfile.osDisk.osType",
+                "in": [
+                  "Windows",
+                  "Linux"
+                ]
+              }
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.HybridCompute/machines"
+              },
+              {
+                "field": "Microsoft.HybridCompute/machines/osName",
+                "in": [
+                  "windows",
+                  "linux"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "roleDefinitionIds": [
+            "/providers/microsoft.authorization/roleDefinitions/9980e02c-c2be-4d73-94e8-173b1dc7cf3c"
+          ],
+          "existenceCondition": {
+            "allOf": [
+              {
+                "field": "Microsoft.Compute/virtualMachines/extensions/type",
+                "in": [
+                  "CustomScriptExtension",
+                  "CustomScript"
+                ]
+              },
+              {
+                "field": "Microsoft.Compute/virtualMachines/extensions/provisioningState",
+                "equals": "Succeeded"
+              },
+              {
+                "field": "name",
+                "like": "MDEDeviceTag*"
+              }
+            ]
+          },
+          "deployment": {
+            "properties": {
+              "mode": "incremental",
+              "template": {
+                "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                "contentVersion": "1.0.0.0",
+                "parameters": {
+                  "vmName": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "osType": {
+                    "type": "string"
+                  },
+                  "mdeTagKey": {
+                    "type": "string"
+                  },
+                  "mdeTagValue": {
+                    "type": "string"
+                  }
+                },
+                "variables": {
+                  "extensionName": "MDEDeviceTag",
+                  "windowsScriptContent": "[concat('New-Item -Path ''HKLM:\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Advanced Threat Protection\\\\DeviceTagging'' -Force | Out-Null; New-ItemProperty -Path ''HKLM:\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Advanced Threat Protection\\\\DeviceTagging'' -Name ''', parameters('mdeTagKey'), ''' -Value ''', parameters('mdeTagValue'), ''' -PropertyType String -Force | Out-Null')]",
+                  "linuxScriptContent": "[concat('#!/bin/bash\nset -euo pipefail\nCONF=\"/etc/opt/microsoft/mdatp/managed/mdatp_managed.json\"\nmkdir -p \"$(dirname \"$CONF\")\"\ncat > \"$CONF\" <<''EOF''\n{\n  \"edr\": {\n    \"tags\": [\n      { \"key\": \"', parameters('mdeTagKey'), '\", \"value\": \"', parameters('mdeTagValue'), '\" }\n    ]\n  }\n}\nEOF\nchmod 600 \"$CONF\"\nexit 0')]"
+                },
+                "resources": [
+                  {
+                    "condition": "[equals(toLower(parameters('osType')), 'windows')]",
+                    "type": "Microsoft.Compute/virtualMachines/extensions",
+                    "apiVersion": "2021-11-01",
+                    "name": "[concat(parameters('vmName'), '/', variables('extensionName'))]",
+                    "location": "[parameters('location')]",
+                    "properties": {
+                      "publisher": "Microsoft.Compute",
+                      "type": "CustomScriptExtension",
+                      "typeHandlerVersion": "1.10",
+                      "autoUpgradeMinorVersion": true,
+                      "settings": {},
+                      "protectedSettings": {
+                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -Command \"', variables('windowsScriptContent'), '\"')]"
+                      }
+                    }
+                  },
+                  {
+                    "condition": "[equals(toLower(parameters('osType')), 'linux')]",
+                    "type": "Microsoft.Compute/virtualMachines/extensions",
+                    "apiVersion": "2021-11-01",
+                    "name": "[concat(parameters('vmName'), '/', variables('extensionName'))]",
+                    "location": "[parameters('location')]",
+                    "properties": {
+                      "publisher": "Microsoft.Azure.Extensions",
+                      "type": "CustomScript",
+                      "typeHandlerVersion": "2.1",
+                      "autoUpgradeMinorVersion": true,
+                      "settings": {},
+                      "protectedSettings": {
+                        "script": "[base64(variables('linuxScriptContent'))]"
+                      }
+                    }
+                  }
+                ]
+              },
+              "parameters": {
+                "vmName": {
+                  "value": "[field('name')]"
+                },
+                "location": {
+                  "value": "[field('location')]"
+                },
+                "osType": {
+                  "value": "[if(equals(field('type'), 'Microsoft.Compute/virtualMachines'), field('Microsoft.Compute/virtualMachines/storageProfile.osDisk.osType'), field('Microsoft.HybridCompute/machines/osName'))]"
+                },
+                "mdeTagKey": {
+                  "value": "[parameters('mdeTagKey')]"
+                },
+                "mdeTagValue": {
+                  "value": "[parameters('mdeTagValue')]"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

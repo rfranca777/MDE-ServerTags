@@ -1,0 +1,70 @@
+{
+    "versao": "2.2.0",
+    "ultimaAtualizacao": "2025-01-01",
+
+    "autenticacao": {
+        "tenantId": "YOUR-TENANT-ID-HERE",
+        "appId": "YOUR-APP-REGISTRATION-ID-HERE",
+        "appSecret": "YOUR-APP-SECRET-HERE",
+        "comentario": "Create an App Registration in Azure AD with 'Machine.ReadWrite.All' permission on Microsoft Defender for Endpoint API"
+    },
+
+    "execucao": {
+        "reportOnly": true,
+        "maxRetries": 3,
+        "retryDelaySec": 5,
+        "batchSize": 25,
+        "logRetentionDays": 30,
+        "logPath": "./logs",
+        "csvReportPath": "./subscription_mapping.csv",
+        "comentario": "Set reportOnly to false only after reviewing the report output"
+    },
+
+    "classificacao": {
+        "inativoDias7": 7,
+        "inativoDias40": 40,
+        "efemeroHoras": 48,
+        "duplicadaTag": "DUPLICADA_EXCLUIR",
+        "efemeroTag": "EFEMERO",
+        "inativo7Tag": "INATIVO_7D",
+        "inativo40Tag": "INATIVO_40D",
+        "tagPrefix": "",
+        "comentario": "Thresholds and tag names for lifecycle classification"
+    },
+
+    "descoberta": {
+        "usarArmApi": true,
+        "usarAzCli": true,
+        "usarMdeMetadata": true,
+        "usarCsvManual": true,
+        "csvPath": "./subscription_mapping.csv",
+        "comentario": "4-level auto-discovery: CSV -> ARM API -> Azure CLI -> MDE metadata"
+    },
+
+    "agendamento": {
+        "horarioExecucao": "02:00",
+        "intervaloHoras": 24,
+        "taskName": "MDE-ServerTags-Daily",
+        "comentario": "Windows Scheduled Task configuration"
+    },
+
+    "notificacao": {
+        "habilitado": false,
+        "smtpServer": "smtp.your-domain.com",
+        "smtpPort": 587,
+        "usarTls": true,
+        "remetente": "mde-automation@your-domain.com",
+        "destinatarios": [
+            "soc@your-domain.com",
+            "infosec@your-domain.com"
+        ],
+        "enviarApenasComMudancas": true,
+        "comentario": "Configure SMTP for email notifications when tags change"
+    },
+
+    "tags": {
+        "managedTagPrefix": "MDE-",
+        "preservarTagsManuais": true,
+        "comentario": "Tags with the managed prefix are controlled by this script; manual tags are preserved"
+    }
+}

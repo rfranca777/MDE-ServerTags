@@ -1,0 +1,55 @@
+# ── Credentials & Secrets ──
+config.json
+*.secret
+*.pfx
+*.pem
+*.key
+
+# ── Logs & Reports ──
+logs/
+*.log
+*.html
+report-*.csv
+
+# ── Runtime Data ──
+subscription_mapping.csv
+!subscription_mapping.example.csv
+
+# ── PowerShell ──
+*.ps1xml
+
+# ── Windows ──
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ── macOS ──
+.DS_Store
+._*
+
+# ── VS Code ──
+.vscode/
+*.code-workspace
+
+# ── IDE ──
+.idea/
+*.suo
+*.user
+*.sln.docstates
+
+# ── Archives ──
+*.zip
+*.tar.gz
+*.7z
+
+# ── Temporary ──
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*~
+
+# ── Node (if docs tooling) ──
+node_modules/
+package-lock.json
