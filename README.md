@@ -1,3 +1,7 @@
+> ⚠️ **[LEGACY — SUPERSEDED]** This project (v2.2.0) has been superseded by **[MDE-ServerTagsBySubscription v3.0.0](https://github.com/rfranca777/MDE-ServerTagsBySubscription)**, which unifies and extends this engine with server-only scoping, configurable thresholds, SOC-protected tag coexistence, exponential rate-limit backoff, and full PS5 compatibility. This repository is archived for reference.
+
+---
+
 <div align="center">
 
 <img src="assets/banner.svg" alt="MDE ServerTags — Automated Server Classification for Microsoft Defender for Endpoint" width="100%"/>
